@@ -51,9 +51,9 @@ class AuthController extends Controller
             return ApiResponse::error('Unauthorized', null, 401);
         }
 
-        return ApiResponse::success('Login successful', [
+        return ApiResponse::success([
             'token' => $token
-        ]);
+        ], 'Login successful',);
     }
     public function me()
     {
