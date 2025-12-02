@@ -1,27 +1,24 @@
-# Root / Docker
-docker/mysql_data/
-
-# Laravel project inside src/
-src/.env
-src/.env.backup
-src/.env.production
-src/vendor/
-src/node_modules/
-src/public/build/
-src/public/hot
-src/public/storage
-src/storage/*.key
-src/storage/pail
-src/.phpunit.cache
-src/.phpactor.json
-src/.phpunit.result.cache
-
-# IDEs / editors
-.idea/
-.vscode/
-.fleet/
-.zed/
-
-# OS files
+*.log
 .DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
 Thumbs.db
