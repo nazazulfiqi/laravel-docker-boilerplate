@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject; // JWT
-use Spatie\Permission\Traits\HasRoles;   // Spatie
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable, HasRoles;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Attributes that are mass assignable.
      */
     protected $fillable = [
         'name',
@@ -24,9 +22,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Attributes hidden in JSON response.
      */
     protected $hidden = [
         'password',
@@ -34,32 +30,26 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Attribute casting rules.
      */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            // jika kamu ingin hashing otomatis gunakan ini
+            // 'password' => 'hashed',
         ];
     }
 
-    // =========================
-    // JWT methods
-    // =========================
-    /**
-     * Get the identifier that will be stored in the JWT subject claim.
-     */
+    // =====================================
+    // JWT METHODS - required by JWTSubject
+    // =====================================
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     */
     public function getJWTCustomClaims(): array
     {
         return [];
