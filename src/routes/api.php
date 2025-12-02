@@ -14,15 +14,11 @@ Route::get('/hello', function () {
     ]);
 });
 
-// Protected routes (JWT + role)
-Route::middleware(['jwt.auth'])->group(function () {
-    // Current authenticated user
+Route::middleware(['jwt'])->group(function () {
+
     Route::get('/me', [AuthController::class, 'me']);
 
-    // Contoh protected route dengan role admin
     Route::middleware(['role:admin'])->get('/admin/data', function () {
-        return response()->json([
-            'secret' => 'admin only data 🔒'
-        ]);
+        return response()->json(['secret' => 'admin only 🔒']);
     });
 });

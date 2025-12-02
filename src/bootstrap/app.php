@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\ApiResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
+            'jwt' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
             'role' => 'Spatie\Permission\Middlewares\RoleMiddleware',
             'permission' => 'Spatie\Permission\Middlewares\PermissionMiddleware',
             'role_or_permission' => 'Spatie\Permission\Middlewares\RoleOrPermissionMiddleware',
@@ -20,72 +22,112 @@ return Application::configure(basePath: dirname(__DIR__))
 
     ->withExceptions(function (Exceptions $exceptions) {
 
-        // 1. Validation Errors
+        /**
+         * 401 — JWT: Token invalid
+         */
+        $exceptions->renderable(function (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return ApiResponse::error(
+                'Unauthorized',
+                'Invalid token',
+                401
+            );
+        });
+
+
+
+        /**
+         * 401 — JWT: Token missing / not provided
+         */
+        $exceptions->renderable(function (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return ApiResponse::error(
+                'Unauthorized',
+                $e->getMessage() ?? 'Token not provided',
+                401
+            );
+        });
+
+        /**
+         * 422 — Validation error
+         */
         $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Validation error',
                 $e->errors(),
                 422
             );
         });
 
-        // 2. Authentication / JWT Auth Errors
+        /**
+         * 401 — Tidak autentikasi umum
+         */
         $exceptions->renderable(function (\Illuminate\Auth\AuthenticationException $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Unauthorized',
                 null,
                 401
             );
         });
 
-        // 3. JWT Token Exception
-        $exceptions->renderable(function (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            return \App\Helpers\ApiResponse::error(
-                'Token error',
-                $e->getMessage(),
-                401
-            );
-        });
-
-        // 4. Model Not Found
+        /**
+         * 404 — Model tidak ditemukan
+         */
         $exceptions->renderable(function (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Resource not found',
                 null,
                 404
             );
         });
 
-        // 5. Route Not Found
+        /**
+         * 404 — Endpoint tidak ditemukan
+         */
         $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Endpoint not found',
                 null,
                 404
             );
         });
 
-        // 6. Method Not Allowed (GET ke POST, dll)
+        /**
+         * 405 — Method tidak diperbolehkan
+         */
         $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Method not allowed',
                 null,
                 405
             );
         });
 
-        // 7. Query (SQL) errors
+        /**
+         * 500 — Error database
+         */
         $exceptions->renderable(function (\Illuminate\Database\QueryException $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Database error',
                 $e->getMessage(),
                 500
             );
         });
 
-        // 8. Fallback: unknown error
+        /**
+         * 401 — JWT: Token not provided by middleware Authenticate
+         */
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException $e) {
+            return ApiResponse::error(
+                'Unauthorized',
+                $e->getMessage(),
+                401
+            );
+        });
+
+        /**
+         * 500 — fallback semua error
+         */
         $exceptions->renderable(function (\Throwable $e) {
-            return \App\Helpers\ApiResponse::error(
+            return ApiResponse::error(
                 'Server error',
                 $e->getMessage(),
                 500
