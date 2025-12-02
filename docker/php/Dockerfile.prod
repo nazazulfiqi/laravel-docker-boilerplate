@@ -1,0 +1,30 @@
+FROM php:8.3-fpm
+
+RUN apt-get update && apt-get install -y \
+    git curl zip unzip libpq-dev libzip-dev libonig-dev \
+    libcurl4-openssl-dev pkg-config libssl-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
+
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+# install composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# set working dir
+WORKDIR /var/www/html
+
+# copy all source code
+COPY ./src /var/www/html
+
+# install dependencies (no dev)
+RUN composer install --no-dev --optimize-autoloader
+
+# optimize laravel
+RUN php artisan config:clear && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
+
+# permissions
+RUN chown -R www-data:www-data /var/www/html

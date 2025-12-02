@@ -1,0 +1,27 @@
+# Root / Docker
+docker/mysql_data/
+
+# Laravel project inside src/
+src/.env
+src/.env.backup
+src/.env.production
+src/vendor/
+src/node_modules/
+src/public/build/
+src/public/hot
+src/public/storage
+src/storage/*.key
+src/storage/pail
+src/.phpunit.cache
+src/.phpactor.json
+src/.phpunit.result.cache
+
+# IDEs / editors
+.idea/
+.vscode/
+.fleet/
+.zed/
+
+# OS files
+.DS_Store
+Thumbs.db
