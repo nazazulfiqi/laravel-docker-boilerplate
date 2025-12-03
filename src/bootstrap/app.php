@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => 'Spatie\Permission\Middlewares\PermissionMiddleware',
             'role_or_permission' => 'Spatie\Permission\Middlewares\RoleOrPermissionMiddleware',
+            'auth.web' => \App\Http\Middleware\WebAuthMiddleware::class,
         ]);
     })
 
