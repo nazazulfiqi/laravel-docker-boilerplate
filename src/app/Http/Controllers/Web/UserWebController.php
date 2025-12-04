@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class DashboardWebController extends Controller
+class UserWebController extends Controller
 {
     public function index()
     {
@@ -16,21 +16,20 @@ class DashboardWebController extends Controller
             return redirect('/login')->withErrors(['auth' => 'Token not found, please login again.']);
         }
 
-        // Panggil API /me
-        $api = config('app.api_url') . '/api/me';
+        // Ambil URL API
+        $api = config('app.api_url') . '/api/users';
 
+        // Call API menggunakan token
         $response = Http::withToken($token)->get($api);
 
         if ($response->failed()) {
-            return redirect('/login')->withErrors(['auth' => 'Session expired, please login again.']);
+            return back()->withErrors(['error' => 'Failed to fetch users data']);
         }
 
-        $data = $response->json('data');
+        $users = $response->json('data'); // array list users
 
-        return view('dashboard.index', [
-            'user' => $data['user'],
-            'roles' => $data['roles'],
-            'permissions' => $data['permissions'],
+        return view('users.index', [
+            'users' => $users
         ]);
     }
 }

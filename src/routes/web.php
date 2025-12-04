@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\DashboardWebController;
+use App\Http\Controllers\Web\UserWebController;
 use Illuminate\Support\Facades\Route;
 
 //welocme
@@ -23,5 +24,12 @@ Route::post('/register', [AuthWebController::class, 'register']);
 
 
 // Dashboard (contoh)
-Route::get('/dashboard', [DashboardWebController::class, 'index'])->middleware('auth.web');
+Route::get('/dashboard', [DashboardWebController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth.web');
+
+Route::get('/users', [UserWebController::class, 'index'])
+    ->name('users')
+    ->middleware('auth.web');
+
 Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
