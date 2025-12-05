@@ -45,6 +45,8 @@ services:
     image: node:20
     container_name: app-node
     working_dir: /var/www/html
+    ports:
+      - "5173:5173"
     volumes:
       - ./src:/var/www/html
     entrypoint: ["tail", "-f", "/dev/null"] # tetap hidup untuk exec
