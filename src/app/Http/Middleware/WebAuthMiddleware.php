@@ -10,7 +10,7 @@ class WebAuthMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!session()->has('jwt_token')) {
-            return redirect('/login');
+            return redirect('/');
         }
 
         return $next($request);

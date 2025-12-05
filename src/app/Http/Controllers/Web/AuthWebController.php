@@ -12,9 +12,9 @@ class AuthWebController extends Controller
     public function showLogin()
     {
 
-        if (session()->has('jwt_token')) {
-            return redirect('/dashboard');
-        }
+        // if (session()->has('jwt_token')) {
+        //     return redirect('/dashboard');
+        // }
 
         return view('auth.login');
     }
@@ -64,6 +64,6 @@ class AuthWebController extends Controller
     public function logout()
     {
         session()->forget('jwt_token');
-        return redirect('/login')->with('success', 'Logged out successfully');
+        return redirect('/')->with('success', 'Logged out successfully');
     }
 }

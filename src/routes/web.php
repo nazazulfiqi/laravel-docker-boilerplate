@@ -15,7 +15,7 @@ Route::get('/test', function () {
 });
 
 // Guest page
-Route::get('/login', [AuthWebController::class, 'showLogin'])->name('login');
+Route::get('/', [AuthWebController::class, 'showLogin'])->name('login');
 Route::get('/register', [AuthWebController::class, 'showRegister'])->name('register');
 
 // Auth action (request ke API)

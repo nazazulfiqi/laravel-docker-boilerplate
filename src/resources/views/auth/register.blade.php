@@ -138,7 +138,7 @@
 </div>
 
 <!-- updated secondary button for light theme -->
-<a href="/login" class="block w-full py-2.5 px-4 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-lg transition text-center hover:bg-gray-50 bg-white">
+<a href="/" class="block w-full py-2.5 px-4 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold rounded-lg transition text-center hover:bg-gray-50 bg-white">
     Sign in instead
 </a>
 @endsection
