@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Dashboard' }} - DAM</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {!! ToastMagic::styles() !!}
 </head>
 
 <body class="bg-gray-50">
@@ -40,12 +41,6 @@
                         <span class="text-sm font-medium">Dashboard</span>
                     </a>
 
-                    <a href="{{ route('users') }}" class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('users') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }} transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-2a6 6 0 0112 0v2zm0 0h6v-2a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                        <span class="text-sm font-medium">Users</span>
-                    </a>
 
                     <a href="#" class="flex items-center px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,27 +61,52 @@
                 <div class="mb-6">
                     <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Master Data</p>
 
-                    <a href="#" class="flex items-center px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    <a href="{{ route('permissions') }}"
+                        class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('permissions') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }} transition">
+
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 7a3 3 0 11-6 0 3 3 0 016 0zm-6 3l-6 6 1.5 1.5 1.5-1.5 1.5 1.5L9 17.5l-1.5-1.5L9 14l-1.5-1.5z" />
                         </svg>
-                        <span class="text-sm font-medium">Categories</span>
+
+                        <span class="text-sm font-medium">Permissions</span>
                     </a>
 
-                    <a href="#" class="flex items-center px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+
+
+
+                    <a href="{{ route('roles') }}"
+                        class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('roles') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }} transition">
+
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 3l7 4v5c0 5.25-3.5 9.75-7 10-3.5-.25-7-4.75-7-10V7l7-4z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4" />
                         </svg>
-                        <span class="text-sm font-medium">Tags</span>
+
+                        <span class="text-sm font-medium">Roles</span>
                     </a>
 
-                    <a href="#" class="flex items-center px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+
+
+                    <a href="{{ route('users') }}"
+                        class="flex items-center px-3 py-2.5 rounded-lg {{ request()->routeIs('users') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }} transition">
+
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M23 20v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
                         </svg>
-                        <span class="text-sm font-medium">Locations</span>
+
+                        <span class="text-sm font-medium">Users</span>
                     </a>
+
+
+
+
                 </div>
 
                 <!-- Settings -->
@@ -106,21 +126,33 @@
             <!-- User Profile Card -->
             <div class="p-4 border-t border-gray-200">
                 <div class="flex items-center space-x-3 mb-3">
+
                     <div class="w-10 h-10 rounded-lg bg-linear-to-br from-blue-400 to-indigo-600 flex items-center justify-center shrink-0">
-                        <span class="text-white font-bold text-sm">{{ substr(auth()->user()->name ?? 'U', 0, 1) }}</span>
+                        <span class="text-white font-bold text-sm">
+                            {{ strtoupper(substr(session('auth_user.name', 'U'), 0, 1)) }}
+                        </span>
                     </div>
+
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">{{ auth()->user()->name ?? 'User' }}</p>
-                        <p class="text-xs text-gray-500 truncate">{{ auth()->user()->email ?? 'user@example.com' }}</p>
+                        <p class="text-sm font-medium text-gray-900 truncate">
+                            {{ session('auth_user.name', 'User') }}
+                        </p>
+                        <p class="text-xs text-gray-500 truncate">
+                            {{ session('auth_user.email', 'user@example.com') }}
+                        </p>
                     </div>
+
                 </div>
+
                 <form method="POST" action="/logout">
                     @csrf
-                    <button type="submit" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                    <button type="submit"
+                        class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition cursor-pointer">
                         Sign out
                     </button>
                 </form>
             </div>
+
         </aside>
 
         <!-- Main Content -->
@@ -154,7 +186,7 @@
                         <div class="relative">
                             <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition">
                                 <div class="w-8 h-8 rounded-lg bg-linear-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
-                                    <span class="text-white font-bold text-sm">{{ substr(auth()->user()->name ?? 'U', 0, 1) }}</span>
+                                    <span class="text-white font-bold text-sm">{{ strtoupper(substr(session('auth_user.name', 'U'), 0, 1)) }}p</span>
                                 </div>
                             </button>
                         </div>
@@ -170,6 +202,7 @@
             </main>
         </div>
     </div>
+    {!! ToastMagic::scripts() !!}
 </body>
 
 </html>

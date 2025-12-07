@@ -9,3 +9,35 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* =============================================
+   OVERRIDE: Pindahkan progress bar ke BAWAH
+   ============================================= */
+
+/* SUCCESS */
+.toast-item.toast-success::before,
+.toast-item.toast-success::after {
+    inset-block-start: auto !important;   /* disable top */
+    inset-block-end: 0 !important;        /* pindah ke bawah */
+}
+
+/* DANGER */
+.toast-item.toast-danger::before,
+.toast-item.toast-danger::after {
+    inset-block-start: auto !important;
+    inset-block-end: 0 !important;
+}
+
+/* WARNING */
+.toast-item.toast-warning::before,
+.toast-item.toast-warning::after {
+    inset-block-start: auto !important;
+    inset-block-end: 0 !important;
+}
+
+/* INFO */
+.toast-item.toast-info::before,
+.toast-item.toast-info::after {
+    inset-block-start: auto !important;
+    inset-block-end: 0 !important;
+}

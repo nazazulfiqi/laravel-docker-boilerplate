@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'DAM Platform' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {!! ToastMagic::styles() !!}
 </head>
 
 <body class="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 py-8">
@@ -25,6 +26,7 @@
             <p>© 2025 DAM Platform. All rights reserved.</p>
         </div>
     </div>
+    {!! ToastMagic::scripts() !!}
 </body>
 
 </html>

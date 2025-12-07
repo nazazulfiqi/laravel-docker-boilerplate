@@ -13,7 +13,7 @@
 </div>
 
 <!-- updated error alert styling for light theme -->
-@if ($errors->any())
+<!-- @if ($errors->any())
 <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200">
     <div class="flex items-start">
         <svg class="w-5 h-5 text-red-600 mt-0.5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -22,7 +22,7 @@
         <span class="text-red-800 text-sm font-medium">{{ $errors->first() }}</span>
     </div>
 </div>
-@endif
+@endif -->
 
 <form method="POST" action="/login" class="space-y-5">
     @csrf

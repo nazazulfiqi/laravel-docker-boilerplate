@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\DashboardWebController;
+use App\Http\Controllers\Web\PermissionWebController;
+use App\Http\Controllers\Web\RoleWebController;
 use App\Http\Controllers\Web\UserWebController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,14 @@ Route::get('/dashboard', [DashboardWebController::class, 'index'])
 
 Route::get('/users', [UserWebController::class, 'index'])
     ->name('users')
+    ->middleware('auth.web');
+
+Route::get('/permissions', [PermissionWebController::class, 'index'])
+    ->name('permissions')
+    ->middleware('auth.web');
+
+Route::get('/roles', [RoleWebController::class, 'index'])
+    ->name('roles')
     ->middleware('auth.web');
 
 Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
