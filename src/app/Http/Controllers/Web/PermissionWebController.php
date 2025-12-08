@@ -10,26 +10,28 @@ class PermissionWebController extends Controller
 {
     public function index()
     {
-        $token = session('jwt_token');
+        // $token = session('jwt_token');
 
-        if (!$token) {
-            return redirect('/login')->withErrors(['auth' => 'Token not found, please login again.']);
-        }
+        // if (!$token) {
+        //     return redirect('/login')->withErrors(['auth' => 'Token not found, please login again.']);
+        // }
 
-        // Ambil URL API
-        $api = config('app.api_url') . '/api/permissions';
+        // // Ambil URL API
+        // $api = config('app.api_url') . '/api/permissions';
 
-        // Call API menggunakan token
-        $response = Http::withToken($token)->get($api);
+        // // Call API menggunakan token
+        // $response = Http::withToken($token)->get($api);
 
-        if ($response->failed()) {
-            return back()->withErrors(['error' => 'Failed to fetch permissions data']);
-        }
+        // if ($response->failed()) {
+        //     return back()->withErrors(['error' => 'Failed to fetch permissions data']);
+        // }
 
-        $permissions = $response->json('data'); // array list permissions
+        // $permissions = $response->json('data'); // array list permissions
 
-        return view('permissions.index', [
-            'permissions' => $permissions
-        ]);
+        // return view('permissions.index', [
+        //     'permissions' => $permissions
+        // ]);
+
+        return view('permissions.index');
     }
 }

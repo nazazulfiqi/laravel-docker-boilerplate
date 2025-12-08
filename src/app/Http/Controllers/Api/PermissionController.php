@@ -17,6 +17,20 @@ class PermissionController extends Controller
         return ApiResponse::success($permissions, 'Permissions retrieved successfully');
     }
 
+    public function filter(Request $request)
+    {
+        $query = Permission::query();
+
+        if ($request->has('name') && $request->name !== null) {
+            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        }
+
+        $permissions = $query->orderBy('name')->get();
+
+        return ApiResponse::success($permissions, 'Filtered permissions retrieved successfully');
+    }
+
+
     // POST /permissions
     public function store(Request $request)
     {
