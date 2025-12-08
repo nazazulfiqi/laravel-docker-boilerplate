@@ -36,9 +36,16 @@ Route::middleware(['jwt'])->group(function () {
             return response()->json(['secret' => 'admin only 🔒']);
         });
 
-        // Role management CRUD
-        Route::resource('roles', RoleController::class)
-            ->only(['index', 'store', 'show', 'update', 'destroy']);
+        // Role management CRUD 
+        Route::prefix('roles')->group(function () {
+            Route::get('/', [RoleController::class, 'index']);
+            Route::get('/filter', [RoleController::class, 'filter']);
+            Route::post('/', [RoleController::class, 'store']);
+            Route::get('/{id}', [RoleController::class, 'show']);
+            Route::put('/{id}', [RoleController::class, 'update']);
+            Route::delete('/{id}', [RoleController::class, 'destroy']);
+        });
+
 
         // Permission management CRUD
         Route::prefix('permissions')->group(function () {

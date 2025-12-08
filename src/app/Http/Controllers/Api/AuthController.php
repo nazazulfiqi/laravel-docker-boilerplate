@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Helpers\ApiResponse;
-
-
-
+use Carbon\Carbon;
+use Tymon\JWTAuth\Facades\JWTFactory;
 
 class AuthController extends Controller
 {
@@ -50,6 +49,20 @@ class AuthController extends Controller
         if (!$token = JWTAuth::attempt($credentials)) {
             return ApiResponse::error('Unauthorized', null, 401);
         }
+
+        // Custom JWT 2 Detik
+        // $user = Auth::user();
+
+
+        // $payload = JWTFactory::customClaims([
+        //     'sub' => $user->id,
+        //     'iat' => Carbon::now()->timestamp,
+        //     'exp' => Carbon::now()->addSeconds(10)->timestamp,
+        // ])->make();
+
+        // $token = JWTAuth::encode($payload)->get();
+        // 
+
 
         return ApiResponse::success([
             'token' => $token

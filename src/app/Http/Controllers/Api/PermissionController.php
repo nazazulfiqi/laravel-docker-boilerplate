@@ -21,13 +21,26 @@ class PermissionController extends Controller
     {
         $query = Permission::query();
 
+        // Search by name
         if ($request->has('name') && $request->name !== null) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
 
-        $permissions = $query->orderBy('name')->get();
+        // Optional: sorting
+        if ($request->has('sort_by')) {
+            $direction = $request->get('sort_dir', 'asc');
+            $query->orderBy($request->sort_by, $direction);
+        } else {
+            $query->orderBy('name', 'asc');
+        }
 
-        return ApiResponse::success($permissions, 'Filtered permissions retrieved successfully');
+        // Pagination (default 10 per page)
+        $perPage = $request->get('per_page', 10);
+
+        $permissions = $query->paginate($perPage)->withQueryString();
+
+        // Return using helper
+        return ApiResponse::paginated($permissions, 'Filtered permissions retrieved successfully');
     }
 
 

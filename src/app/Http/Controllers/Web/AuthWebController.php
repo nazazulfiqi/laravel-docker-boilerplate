@@ -51,7 +51,7 @@ class AuthWebController extends Controller
 
         if ($me->failed()) {
             session()->forget('jwt_token');
-            return redirect('/login')->withErrors(['auth' => 'Session expired, please login again.']);
+            return redirect('/')->withErrors(['auth' => 'Session expired, please login again.']);
         }
 
         $data = $me->json('data');
@@ -79,7 +79,7 @@ class AuthWebController extends Controller
             return back()->withErrors(['register' => 'Registration failed']);
         }
 
-        return redirect('/login')->with('success', 'Registration successful! Please login.');
+        return redirect('/')->with('success', 'Registration successful! Please login.');
     }
     public function logout()
     {
@@ -89,7 +89,6 @@ class AuthWebController extends Controller
         session()->forget('auth_permissions');
 
         ToastMagic::success('Logged out', 'You have been logged out successfully.');
-
         return redirect('/')->with('success', 'Logged out successfully');
     }
 }

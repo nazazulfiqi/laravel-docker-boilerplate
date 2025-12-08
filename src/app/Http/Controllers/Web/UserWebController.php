@@ -13,7 +13,7 @@ class UserWebController extends Controller
         $token = session('jwt_token');
 
         if (!$token) {
-            return redirect('/login')->withErrors(['auth' => 'Token not found, please login again.']);
+            return redirect('/')->withErrors(['auth' => 'Token not found, please login again.']);
         }
 
         // Ambil URL API

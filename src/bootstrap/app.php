@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => 'Spatie\Permission\Middlewares\PermissionMiddleware',
             'role_or_permission' => 'Spatie\Permission\Middlewares\RoleOrPermissionMiddleware',
             'auth.web' => \App\Http\Middleware\WebAuthMiddleware::class,
+            'jwt.check' => \App\Http\Middleware\CheckJwtToken::class,
         ]);
     })
 

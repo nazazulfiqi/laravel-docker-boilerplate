@@ -164,7 +164,7 @@ return [
         App\Providers\RouteServiceProvider::class, // <-- pastikan ini ada
     ],
 
-    'api_url' => env('API_URL', 'http://nginx'),
+    'api_url' => env('API_URL', 'http://host.docker.internal:8000'),
 
 
 

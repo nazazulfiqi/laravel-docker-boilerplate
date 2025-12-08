@@ -34,9 +34,12 @@ Route::get('/users', [UserWebController::class, 'index'])
     ->name('users')
     ->middleware('auth.web');
 
-Route::get('/permissions', [PermissionWebController::class, 'index'])
-    ->name('permissions')
-    ->middleware('auth.web');
+Route::middleware(['auth.web'])->group(function () {
+    Route::get('/permissions', [PermissionWebController::class, 'index'])->name('permissions');
+    Route::get('/permissions/create', [PermissionWebController::class, 'create'])->name('permissions.create');
+    Route::post('/permissions/save', [PermissionWebController::class, 'save'])->name('permissions.save');
+});
+
 
 Route::get('/roles', [RoleWebController::class, 'index'])
     ->name('roles')

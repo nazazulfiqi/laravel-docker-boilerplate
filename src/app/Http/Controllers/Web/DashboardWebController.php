@@ -13,7 +13,7 @@ class DashboardWebController extends Controller
         $token = session('jwt_token');
 
         if (!$token) {
-            return redirect('/login')->withErrors(['auth' => 'Token not found, please login again.']);
+            return redirect('/')->withErrors(['auth' => 'Token not found, please login again.']);
         }
 
         // Panggil API /me
@@ -22,7 +22,7 @@ class DashboardWebController extends Controller
         $response = Http::withToken($token)->get($api);
 
         if ($response->failed()) {
-            return redirect('/login')->withErrors(['auth' => 'Session expired, please login again.']);
+            return redirect('/')->withErrors(['auth' => 'Session expired, please login again.']);
         }
 
         $data = $response->json('data');
