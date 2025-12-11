@@ -4,83 +4,46 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Services\AuthService;
 use App\Helpers\ApiResponse;
-use Carbon\Carbon;
-use Tymon\JWTAuth\Facades\JWTFactory;
 
 class AuthController extends Controller
 {
+    protected $auth;
+
+    public function __construct(AuthService $auth)
+    {
+        $this->auth = $auth;
+    }
+
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|string',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $user = $this->auth->register($data);
 
-
-        $user->assignRole('viewer');
-
-
-        return ApiResponse::success(
-            'Register successful',
-
-            $user,
-            201
-        );
+        return ApiResponse::success($user, 'Register successful', 201);
     }
-
-
 
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return ApiResponse::error('Unauthorized', null, 401);
+        $token = $this->auth->login($credentials);
+
+        if (!$token) {
+            return ApiResponse::error('Unauthorized', 401);
         }
 
-        // Custom JWT 2 Detik
-        // $user = Auth::user();
-
-
-        // $payload = JWTFactory::customClaims([
-        //     'sub' => $user->id,
-        //     'iat' => Carbon::now()->timestamp,
-        //     'exp' => Carbon::now()->addSeconds(10)->timestamp,
-        // ])->make();
-
-        // $token = JWTAuth::encode($payload)->get();
-        // 
-
-
-        return ApiResponse::success([
-            'token' => $token
-        ], 'Login successful',);
+        return ApiResponse::success(['token' => $token], 'Login successful');
     }
+
     public function me()
     {
-        $user = Auth::user();
-
-        return ApiResponse::success([
-            'user' => [
-                'id'          => $user->id,
-                'name'        => $user->name,
-                'email'       => $user->email,
-                'created_at'  => $user->created_at,
-            ],
-            'roles' => $user->getRoleNames(), // Spatie
-            'permissions' => $user->getAllPermissions()->pluck('name'),
-        ]);
+        return ApiResponse::success($this->auth->me());
     }
 }

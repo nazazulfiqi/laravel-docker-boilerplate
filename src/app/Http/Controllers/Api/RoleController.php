@@ -4,113 +4,70 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    /**
-     * List all roles
-     */
+    protected $service;
+
+    public function __construct(RoleService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        $roles = Role::all();
-
         return ApiResponse::success(
-            $roles,
+            $this->service->getAll(),
             'Roles retrieved successfully'
         );
     }
 
     public function filter(Request $request)
     {
-        $query = Permission::query();
-
-        // Search by name
-        if ($request->has('name') && $request->name !== null) {
-            $query->where('name', 'LIKE', '%' . $request->name . '%');
-        }
-
-        // Optional: sorting
-        if ($request->has('sort_by')) {
-            $direction = $request->get('sort_dir', 'asc');
-            $query->orderBy($request->sort_by, $direction);
-        } else {
-            $query->orderBy('name', 'asc');
-        }
-
-        // Pagination (default 10 per page)
-        $perPage = $request->get('per_page', 10);
-
-        $roles = $query->paginate($perPage)->withQueryString();
-
-        // Return using helper
-        return ApiResponse::paginated($roles, 'Filtered roles retrieved successfully');
+        return ApiResponse::paginated(
+            $this->service->filter($request),
+            'Filtered roles retrieved successfully'
+        );
     }
 
-    /**
-     * Create new role
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|unique:roles,name',
-        ]);
-
-        $role = Role::create([
-            'name' => $request->name,
+            'name' => 'required|string|unique:roles'
         ]);
 
         return ApiResponse::success(
-            $role,
+            $this->service->create($request),
             'Role created successfully',
             201
         );
     }
 
-    /**
-     * Show a single role
-     */
     public function show($id)
     {
-        $role = Role::findOrFail($id);
-
         return ApiResponse::success(
-            $role,
+            $this->service->findById($id),
             'Role retrieved successfully'
         );
     }
 
-    /**
-     * Update role
-     */
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($id);
-
         $request->validate([
-            'name' => 'required|string|unique:roles,name,' . $role->id,
+            'name' => 'required|string|unique:roles,name,' . $id
         ]);
 
-        $role->update([
-            'name' => $request->name,
-        ]);
-
-        return ApiResponse::success([
-            'message' => 'Role updated successfully',
-            'role' => $role,
-        ]);
+        return ApiResponse::success(
+            $this->service->update($request, $id),
+            'Role updated successfully'
+        );
     }
 
-    /**
-     * Delete role
-     */
     public function destroy($id)
     {
-        $role = Role::findOrFail($id);
-
-        $role->delete();
+        $this->service->delete($id);
 
         return ApiResponse::success(
             null,
@@ -120,17 +77,23 @@ class RoleController extends Controller
 
     public function attachPermissions(Request $request, $roleId)
     {
-        $request->validate(['permissions' => 'required|array']);
-        $role = Role::findOrFail($roleId);
-        $role->givePermissionTo($request->permissions);
-        return ApiResponse::success($role->permissions, 'Permissions attached');
+        $request->validate([
+            'permissions' => 'required|array'
+        ]);
+
+        return ApiResponse::success(
+            $this->service->attachPermissions($request, $roleId),
+            'Permissions attached'
+        );
     }
 
     public function detachPermission($roleId, $permissionId)
     {
-        $role = Role::findOrFail($roleId);
-        $permission = Permission::findOrFail($permissionId);
-        $role->revokePermissionTo($permission);
-        return ApiResponse::success(null, 'Permission detached');
+        $this->service->detachPermission($roleId, $permissionId);
+
+        return ApiResponse::success(
+            null,
+            'Permission detached'
+        );
     }
 }

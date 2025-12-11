@@ -3,80 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponse;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Controller;
-
+use App\Services\PermissionService;
+use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-    // GET /permissions
+    protected $service;
+
+    public function __construct(PermissionService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = $this->service->getAll();
         return ApiResponse::success($permissions, 'Permissions retrieved successfully');
     }
 
     public function filter(Request $request)
     {
-        $query = Permission::query();
-
-        // Search by name
-        if ($request->has('name') && $request->name !== null) {
-            $query->where('name', 'LIKE', '%' . $request->name . '%');
-        }
-
-        // Optional: sorting
-        if ($request->has('sort_by')) {
-            $direction = $request->get('sort_dir', 'asc');
-            $query->orderBy($request->sort_by, $direction);
-        } else {
-            $query->orderBy('name', 'asc');
-        }
-
-        // Pagination (default 10 per page)
-        $perPage = $request->get('per_page', 10);
-
-        $permissions = $query->paginate($perPage)->withQueryString();
-
-        // Return using helper
-        return ApiResponse::paginated($permissions, 'Filtered permissions retrieved successfully');
+        $result = $this->service->filter($request);
+        return ApiResponse::paginated($result, 'Filtered permissions retrieved successfully');
     }
 
-
-    // POST /permissions
     public function store(Request $request)
     {
         $request->validate(['name' => 'required|string|unique:permissions,name']);
-        $permission = Permission::create(['name' => $request->name]);
+        $permission = $this->service->create($request->name);
+
         return ApiResponse::success($permission, 'Permission created');
     }
 
-    // GET /permissions/{id}
     public function show($id)
     {
-        $permission = Permission::findOrFail($id);
+        $permission = $this->service->find($id);
+        if (!$permission) return ApiResponse::error('Permission not found', 404);
 
-        return ApiResponse::success(
-            $permission,
-            'Permission retrieved successfully'
-        );
+        return ApiResponse::success($permission, 'Permission retrieved successfully');
     }
 
-    // PUT /permissions/{id}
     public function update(Request $request, $id)
     {
         $request->validate(['name' => 'required|string|unique:permissions,name,' . $id]);
-        $permission = Permission::findOrFail($id);
-        $permission->update(['name' => $request->name]);
+
+        $permission = $this->service->update($id, $request->name);
         return ApiResponse::success($permission, 'Permission updated');
     }
 
-    // DELETE /permissions/{id}
     public function destroy($id)
     {
-        $permission = Permission::findOrFail($id);
-        $permission->delete();
+        $deleted = $this->service->delete($id);
+        if (!$deleted) return ApiResponse::error('Permission not found', 404);
+
         return ApiResponse::success(null, 'Permission deleted');
     }
 }

@@ -22,8 +22,6 @@
     </div>
 
 
-
-    <!-- Form -->
     <!-- Form -->
     <form method="POST" action="{{ route('permissions.save') }}"
         class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
@@ -49,7 +47,7 @@
 
         <!-- Submit -->
         <button type="submit"
-            class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition">
+            class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition cursor-pointer">
             Create Permission
         </button>
 

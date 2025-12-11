@@ -4,7 +4,8 @@ use App\Helpers\ApiResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -85,13 +86,16 @@ return Application::configure(basePath: dirname(__DIR__))
         /**
          * 404 — Endpoint tidak ditemukan
          */
-        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-            return ApiResponse::error(
-                'Endpoint not found',
-                null,
-                404
-            );
+
+
+        $exceptions->renderable(function (NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return ApiResponse::error('Endpoint not found', null, 404);
+            }
+
+            return response()->view('errors.404', [], 404);
         });
+
 
         /**
          * 405 — Method tidak diperbolehkan

@@ -25,7 +25,7 @@ Route::post('/login', [AuthWebController::class, 'login']);
 Route::post('/register', [AuthWebController::class, 'register']);
 
 
-// Dashboard (contoh)
+// Dashboard
 Route::get('/dashboard', [DashboardWebController::class, 'index'])
     ->name('dashboard')
     ->middleware('auth.web');
