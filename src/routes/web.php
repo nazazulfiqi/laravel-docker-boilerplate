@@ -36,8 +36,14 @@ Route::get('/users', [UserWebController::class, 'index'])
 
 Route::middleware(['auth.web'])->group(function () {
     Route::get('/permissions', [PermissionWebController::class, 'index'])->name('permissions');
+
     Route::get('/permissions/create', [PermissionWebController::class, 'create'])->name('permissions.create');
     Route::post('/permissions/save', [PermissionWebController::class, 'save'])->name('permissions.save');
+
+    Route::get('/permissions/{id}/edit', [PermissionWebController::class, 'edit'])->name('permissions.edit');
+    Route::post('/permissions/{id}/update', [PermissionWebController::class, 'update'])->name('permissions.update');
+
+    Route::delete('/permissions/{id}', [PermissionWebController::class, 'delete'])->name('permissions.delete');
 });
 
 

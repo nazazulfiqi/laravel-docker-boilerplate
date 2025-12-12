@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ $title ?? 'Dashboard' }} - DAM</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/js/components/confirm-modal.js'])
 
         {!! ToastMagic::styles() !!}
     </head>

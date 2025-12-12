@@ -6,8 +6,8 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Create Permission</h1>
-            <p class="text-gray-600 mt-1 text-sm">Create a new permission</p>
+            <h1 class="text-2xl font-bold text-gray-900">Edit Permission</h1>
+            <p class="text-gray-600 mt-1 text-sm">Edit the permission details</p>
         </div>
         <a href="{{ route('permissions') }}"
             class="inline-flex items-center justify-center px-4 py-2 bg-linear-to-r from-gray-700 to-black text-white font-semibold rounded-lg
@@ -21,50 +21,35 @@
         </a>
     </div>
 
-
-    <!-- Form -->
-    <form id="createForm" method="POST" action="{{ route('permissions.save') }}"
-        class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+    <form id="editForm" method="POST" action="{{ route('permissions.update', $permission['id']) }}" class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
 
         @csrf
 
-        <!-- Input -->
         <div>
             <label class="block text-sm font-medium text-gray-700">Permission Name</label>
-            <input
-                type="text"
-                name="name"
-                value="{{ old('name') }}"
+            <input type="text" name="name" value="{{ old('name', $permission['name']) }}"
                 class="mt-2 w-full px-4 py-2 border rounded-lg text-sm
-           @error('name') border-red-500 @enderror"
-                placeholder="Enter permission name" />
-
+           @error('name') border-red-500 @enderror">
             @error('name')
             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
-
         </div>
 
-        <!-- Trigger Modal -->
-        <button type="button"
-            data-open-modal="createConfirmModal"
-            class="w-full px-4 py-2 bg-linear-to-br from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition cursor-pointer">
-            Create Permission
-        </button>
+        <button type="button" data-open-modal="updateConfirmModal"
+            class="w-full px-4 py-2 bg-linear-to-br from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition cursor-pointer">Update Permissions</button>
     </form>
 
-    <!-- Modal Component -->
     <x-modal.confirm
-        id="createConfirmModal"
-        title="Confirm Create"
-        :message="'Are you sure you want to create this new permission?'"
-        confirmText="Yes, Create"
+        id="updateConfirmModal"
+        title="Confirm Update"
+        :message="'Are you sure you want to update this permission?'"
+        confirmText="Yes, Update"
         cancelText="Cancel"
-        confirmForm="createForm" />
+        confirmForm="editForm" />
+
 
 
 </div>
-
 
 
 @endsection

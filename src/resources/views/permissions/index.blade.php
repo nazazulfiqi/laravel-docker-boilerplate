@@ -27,11 +27,7 @@
         <div class="flex-1">
             <input id="searchBox" type="search" placeholder="Search permissions..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm">
         </div>
-        <select class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Inactive</option>
-        </select>
+
     </div>
 
     <!-- Table -->
@@ -54,21 +50,40 @@
             </table>
         </div>
 
-        <!-- Pagination -->
 
     </div>
+
+    <!-- Pagination -->
+
     <div class="flex items-center justify-between mt-4">
         <p class="text-sm text-gray-600 pagination-info"></p>
         <div class="flex items-center space-x-2 pagination-buttons"></div>
     </div>
 
+    <form id="deleteForm" method="POST" class="hidden">
+        @csrf
+        @method("DELETE")
+    </form>
 
-    {{-- Inject token ke JS --}}
-    <script>
-        window.APP_JWT_TOKEN = "{{ session('jwt_token') }}";
-    </script>
+    <x-modal.confirm
+        id="deleteConfirmModal"
+        title="Confirm Delete"
+        :message="'Are you sure you want to delete this item?'"
+        confirmText="Yes, Delete"
+        cancelText="Cancel"
+        confirmForm="deleteForm"
+        color="red" />
 
-    {{-- Load file JS halaman --}}
-    @vite(['resources/js/pages/permissions/get.js'])
 
-    @endsection
+</div>
+
+{{-- Inject token ke JS --}}
+<script>
+    window.APP_JWT_TOKEN = "{{ session('jwt_token') }}";
+</script>
+
+{{-- Load file JS halaman --}}
+@vite(['resources/js/pages/permissions/get.js'])
+@vite(['resources/js/pages/permissions/delete.js'])
+
+@endsection

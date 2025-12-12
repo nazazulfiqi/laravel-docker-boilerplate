@@ -3,10 +3,13 @@ export function renderPagination(meta, onPageClick) {
     const info = document.querySelector('.pagination-info');
 
     wrapper.innerHTML = "";
-    info.textContent = `Showing page ${meta.current_page} of ${meta.last_page} — Total ${meta.total}`;
 
-    const current = meta.current_page;
-    const last = meta.last_page;
+    const total = meta.total ?? 0;
+    const current = meta.current_page ?? 1;
+    const last = meta.last_page ?? 1;
+
+    // Info text
+    info.textContent = `Showing page ${current} of ${last} — Total ${total}`;
 
     const createBtn = (label, page, opts = {}) => {
         const btn = document.createElement("button");
@@ -32,8 +35,16 @@ export function renderPagination(meta, onPageClick) {
         wrapper.appendChild(dot);
     };
 
+    // Jika total 0, tampilkan tombol page 1 + Previous/Next disabled
+    if (total === 0) {
+        createBtn("Previous", 1, { disabled: true });
+        createBtn(1, 1, { active: true });
+        createBtn("Next", 1, { disabled: true });
+        return;
+    }
+
     // Previous
-    createBtn("Previous", current - 1, { disabled: !meta.prev_page_url });
+    createBtn("Previous", current - 1, { disabled: current <= 1 });
 
     // Always show 1
     createBtn(1, 1, { active: current === 1 });
@@ -41,12 +52,12 @@ export function renderPagination(meta, onPageClick) {
     // Left dots
     if (current > 3) createDots();
 
-    // Middle pages
-    [current - 1, current, current + 1].forEach(p => {
+    // Middle pages (between 1 and last)
+    for (let p = current - 1; p <= current + 1; p++) {
         if (p > 1 && p < last) {
             createBtn(p, p, { active: p === current });
         }
-    });
+    }
 
     // Right dots
     if (current < last - 2) createDots();
@@ -55,5 +66,5 @@ export function renderPagination(meta, onPageClick) {
     if (last > 1) createBtn(last, last, { active: current === last });
 
     // Next
-    createBtn("Next", current + 1, { disabled: !meta.next_page_url });
+    createBtn("Next", current + 1, { disabled: current >= last });
 }
