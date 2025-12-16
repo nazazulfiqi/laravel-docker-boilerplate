@@ -70,9 +70,9 @@ class PermissionWebController extends Controller
             ]);
         }
 
-        // if ($response->failed()) {
-        //     abort(404, 'Permission not found');
-        // }
+        if ($response->failed()) {
+            abort(404, 'Permission not found');
+        }
 
         $permission = $response->json('data');
 
